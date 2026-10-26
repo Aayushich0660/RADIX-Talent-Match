@@ -1,0 +1,6 @@
+{
+  "name": "RADIX Talent Match — Candidate Profile Builder",
+  "description": "Role 3 Profile Builder for RADIX Talent Match: in-memory candidate profile creation with skill classification, experience logging, CV attachment, dynamic completion scoring, and JSON export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
