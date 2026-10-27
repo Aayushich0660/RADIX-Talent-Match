@@ -7,7 +7,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.profiles import router as profiles_router
-from app.database import is_database_connected
+from app.database import get_database_status
 
 app = FastAPI(
     title="RADIX Talent Match — Profile Builder API",
@@ -34,15 +34,10 @@ app.include_router(profiles_router)
 @app.get("/api/health", tags=["Health"])
 def health_check():
     """
-    Returns server status and Supabase connection state.
+    Returns server status and verified read access to the profiles table.
     """
-    db_connected = is_database_connected()
     return {
         "status": "healthy",
         "service": "radix-profile-builder-api",
-        "database": {
-            "type": "supabase",
-            "connected": db_connected,
-            "mode": "live_supabase" if db_connected else "local_fallback",
-        },
+        "database": get_database_status(),
     }

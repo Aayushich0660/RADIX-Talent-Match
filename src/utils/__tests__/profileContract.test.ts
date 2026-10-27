@@ -8,6 +8,7 @@
 
 import { calculateProfileCompletion, isValidEmail, isMeaningfulEducation, isValidEducation } from '../completion';
 import { exportToRadixProfileJSON, serializeEducationToString } from '../exportProfile';
+import { profileToFormState } from '../profileAdapter';
 import {
   validateName,
   validateEmail,
@@ -300,6 +301,7 @@ export function runContractAudit() {
 
   const comp0 = calculateProfileCompletion(baseProfile);
   assert('Initial empty profile has 0 score', comp0.score === 0);
+  assert('CV is optional and excluded from required milestones', comp0.milestones.find((m) => m.id === 'cv')?.isRequired === false);
 
   // Incomplete education (only degree, missing institution) must NOT satisfy education milestone
   const profileIncompleteEdu = {
@@ -325,7 +327,7 @@ export function runContractAudit() {
   const compCompleteEdu = calculateProfileCompletion(profileCompleteEdu);
   assert('Complete education satisfies education milestone', compCompleteEdu.milestones.find((m) => m.id === 'education')?.isComplete === true);
 
-  // Full 6 requirements complete gives 100%
+  // All required fields complete gives 100%; CV selection is optional.
   const completeProfile: CandidateProfileState = {
     personal: {
       fullName: 'Aarav Sharma',
@@ -361,7 +363,9 @@ export function runContractAudit() {
   };
 
   const compFull = calculateProfileCompletion(completeProfile);
-  assert('All 6 requirements complete gives 100% and isReadyForSubmission true', compFull.score === 100 && compFull.isReadyForSubmission);
+  assert('All required fields complete gives 100% and isReadyForSubmission true', compFull.score === 100 && compFull.isReadyForSubmission);
+  const completeWithoutCv = calculateProfileCompletion({ ...completeProfile, cvFile: null });
+  assert('Manual profile is ready without a CV', completeWithoutCv.score === 100 && completeWithoutCv.isReadyForSubmission);
 
   // ==========================================
   // SECTION 6: JSON EXPORT CONTRACT
@@ -369,6 +373,21 @@ export function runContractAudit() {
   console.log('\n--- 6. JSON Export Contract & Phone Inclusion ---');
   const exported = exportToRadixProfileJSON(completeProfile);
 
+  assert(
+    'Exported profile uses the exact shared top-level fields',
+    JSON.stringify(Object.keys(exported).sort()) === JSON.stringify([
+      'certifications',
+      'cv_file',
+      'education',
+      'email',
+      'hackathons',
+      'internships',
+      'name',
+      'phone',
+      'preferred_roles',
+      'skills',
+    ])
+  );
   assert('Exported JSON contains "phone" key', 'phone' in exported);
   assert('Exported phone is non-null and formatted with country code', exported.phone === '+91 9876543210');
   assert('Exported name is trimmed', exported.name === 'Aarav Sharma');
@@ -387,6 +406,10 @@ export function runContractAudit() {
   const jsonString = JSON.stringify(exported, null, 2);
   const parsedBack = JSON.parse(jsonString);
   assert('JSON stringifies and parses back cleanly', parsedBack.phone === '+91 9876543210');
+  assert(
+    'Loading and re-exporting the shared profile preserves its JSON contract',
+    JSON.stringify(exportToRadixProfileJSON(profileToFormState(exported))) === JSON.stringify(exported)
+  );
 
   console.log(`\n=== AUDIT SUMMARY: ${passed} PASSED, ${failed} FAILED ===\n`);
   return { passed, failed };

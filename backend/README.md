@@ -8,7 +8,7 @@ This Python FastAPI service provides validation, Supabase persistence, and retri
 
 - **Framework:** FastAPI with Pydantic v2 data models.
 - **Database:** Supabase (PostgreSQL with JSONB structured profile storage).
-- **Data Exchange:** Standard RADIX JSON contract shared with Role 2 (Resume Parsing), Role 4 (Talent Check), and Role 5 (Skill Matching).
+- **Data Exchange:** RADIX shared candidate-profile JSON contract for consumers such as Roles 4 and 5. Role 2 resume parsing is not implemented yet.
 
 ---
 
@@ -62,12 +62,30 @@ uvicorn app.main:app --reload --port 8000
 - API Docs: `http://localhost:8000/docs`
 - Health check: `http://localhost:8000/api/health`
 
+On Windows, from the repository root, run `cd backend` and then
+`python -m uvicorn app.main:app --reload --port 8000`.
+
+The backend loads `backend/.env` when present, regardless of the launch
+directory. If that file is absent, it falls back to the repository-root `.env`.
+The health endpoint performs a read-only `candidate_profiles` query; a
+configured Supabase client alone is not reported as a successful connection.
+If Supabase is configured but its read check fails, health reports
+`mode: "unavailable"` rather than `local_fallback`.
+
+When Supabase credentials are absent, the service stores profiles in process
+memory. The health endpoint reports this as `local_fallback`; these records are
+not durable and disappear when the backend restarts. A configured client reports
+`live_supabase` only after a read-only query succeeds. Successful writes also
+require the `candidate_profiles` table above to be writable. Keep all Supabase
+credentials in the backend environment only, never in Vite `VITE_*` variables.
+
 ---
 
 ## 5. API Endpoints
 
 ### `POST /api/profiles`
-Save a new candidate profile.
+Create a new candidate profile. The API returns `201 Created` with a record
+containing `id`, `profile`, `created_at`, and `updated_at`.
 
 **Request Body:**
 ```json
@@ -95,7 +113,7 @@ Save a new candidate profile.
   "internships": [],
   "certifications": [],
   "preferred_roles": ["Frontend Engineer"],
-  "cv_file": "alex_morgan_resume.pdf"
+  "cv_file": null
 }
 ```
 
@@ -110,7 +128,9 @@ Save a new candidate profile.
 ```
 
 ### `GET /api/profiles/{profile_id}`
-Retrieve a saved candidate profile by its persistent UUID. Used by Role 4 (Talent Check) and Role 5 (Skill Matching).
+Retrieve a saved candidate profile by its persistent UUID. Roles 4 and 5 can use
+this endpoint to fetch a single profile. The response contains the same shared
+profile JSON under `profile`, alongside the ID and timestamps.
 
 ### `PUT /api/profiles/{profile_id}`
 Update an existing candidate profile.
@@ -120,3 +140,70 @@ List candidate profiles with pagination.
 
 ### `DELETE /api/profiles/{profile_id}`
 Delete a candidate profile.
+
+The shared contract uses these top-level fields: `name` (string), `email`
+(string), `phone` (string or null), `education` (array of objects containing
+`degree`, `field_of_study`, `institution`, and `graduation_year`), `skills`
+(array containing `skill_name`, `category_code`, `evidence`, and `confidence`),
+`hackathons`, `internships`, `certifications`, `preferred_roles` (string
+array), and `cv_file` (string or null). Skill category codes are `COD`, `DSA`,
+`OOD`, `APTI`, `COMM`, `AI`, `CLOUD`, `SQL`, `SWE`, `SYSD`, `NETW`, `OS`, and
+`OTHER`; confidence is `high`, `medium`, `low`, or null.
+
+All education fields are strings. Hackathon/project records contain `type`
+(`hackathon` or `project`), `name`, `title`, `description`, `technologies`
+(string array), and `date_or_year`. Internship records contain `company`,
+`role`, `start_date`, `end_date`, `is_ongoing` (boolean), `description`, and
+`technologies` (string array). Certification records contain `name`,
+`issuing_organization`, `issue_year`, and `credential_url` (strings).
+`preferred_roles` contains strings. `cv_file` is only an optional filename
+string: uploaded file contents and resume parsing are not part of this API.
+
+### Example for downstream consumers
+
+Roles 4 and 5 should first receive a saved record ID (from a create or update
+response) and then request:
+
+```http
+GET /api/profiles/<profile_id>
+```
+
+The response is the stored record envelope:
+
+```json
+{
+  "id": "e4b2568f-9e73-4ac8-b80c-7b08499292a8",
+  "profile": {
+    "name": "Alex Morgan",
+    "email": "alex.morgan.cs@university.edu",
+    "phone": "+1 4158902341",
+    "education": [
+      {
+        "degree": "Bachelor's Degree",
+        "field_of_study": "Computer Science",
+        "institution": "University of California, Berkeley",
+        "graduation_year": "2025"
+      }
+    ],
+    "skills": [
+      {
+        "skill_name": "TypeScript / React",
+        "category_code": "COD",
+        "evidence": "Built full-stack applications",
+        "confidence": "high"
+      }
+    ],
+    "hackathons": [],
+    "internships": [],
+    "certifications": [],
+    "preferred_roles": ["Frontend Engineer"],
+    "cv_file": null
+  },
+  "created_at": "2026-10-26T18:00:00Z",
+  "updated_at": "2026-10-26T18:00:00Z"
+}
+```
+
+Roles 4 and 5 should consume `response.profile` using this existing schema; the
+profile ID and timestamps are envelope metadata. No parser-specific fields are
+added. Role 2 resume parsing and parser-based prefill are not implemented.

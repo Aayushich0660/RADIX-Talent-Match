@@ -7,10 +7,23 @@ import uuid
 from datetime import datetime, timezone
 from typing import List, Optional, Dict, Any
 from app.models import CandidateProfilePayload, ProfileResponse
-from app.database import get_supabase_client
+from app.database import get_supabase_client, is_supabase_configured
 
 # In-memory storage cache used for unit testing / fallback when Supabase keys are not set
 _in_memory_store: Dict[str, Dict[str, Any]] = {}
+
+
+class ProfilePersistenceError(RuntimeError):
+    """Raised when a configured Supabase operation cannot be confirmed."""
+
+
+def _get_profile_client():
+    client = get_supabase_client()
+    if client is None and is_supabase_configured():
+        raise ProfilePersistenceError(
+            "Supabase is configured but its client is unavailable; no database operation was completed."
+        )
+    return client
 
 
 def _get_utc_now_iso() -> str:
@@ -22,7 +35,7 @@ class ProfileService:
     def create_profile(payload: CandidateProfilePayload) -> ProfileResponse:
         profile_id = str(uuid.uuid4())
         now = _get_utc_now_iso()
-        client = get_supabase_client()
+        client = _get_profile_client()
 
         if client:
             try:
@@ -43,8 +56,14 @@ class ProfileService:
                         created_at=row["created_at"],
                         updated_at=row["updated_at"],
                     )
-            except Exception as e:
-                print(f"[Supabase Write Error] {e}. Falling back to persistent session cache.")
+            except Exception as error:
+                raise ProfilePersistenceError(
+                    "Supabase insert failed; the profile was not confirmed saved."
+                ) from error
+
+            raise ProfilePersistenceError(
+                "Supabase insert returned no saved record."
+            )
 
         # Fallback / local test store
         record = {
@@ -63,7 +82,7 @@ class ProfileService:
 
     @staticmethod
     def get_profile(profile_id: str) -> Optional[ProfileResponse]:
-        client = get_supabase_client()
+        client = _get_profile_client()
         if client:
             try:
                 response = client.table("candidate_profiles").select("*").eq("id", profile_id).execute()
@@ -75,8 +94,11 @@ class ProfileService:
                         created_at=row["created_at"],
                         updated_at=row["updated_at"],
                     )
-            except Exception as e:
-                print(f"[Supabase Read Error] {e}.")
+                return None
+            except Exception as error:
+                raise ProfilePersistenceError(
+                    "Supabase profile read failed."
+                ) from error
 
         if profile_id in _in_memory_store:
             data = _in_memory_store[profile_id]
@@ -90,22 +112,23 @@ class ProfileService:
 
     @staticmethod
     def list_profiles(limit: int = 50, offset: int = 0) -> List[ProfileResponse]:
-        client = get_supabase_client()
+        client = _get_profile_client()
         if client:
             try:
                 response = client.table("candidate_profiles").select("*").range(offset, offset + limit - 1).execute()
-                if response.data:
-                    return [
-                        ProfileResponse(
-                            id=row["id"],
-                            profile=CandidateProfilePayload(**row["profile"]),
-                            created_at=row["created_at"],
-                            updated_at=row["updated_at"],
-                        )
-                        for row in response.data
-                    ]
-            except Exception as e:
-                print(f"[Supabase List Error] {e}.")
+                return [
+                    ProfileResponse(
+                        id=row["id"],
+                        profile=CandidateProfilePayload(**row["profile"]),
+                        created_at=row["created_at"],
+                        updated_at=row["updated_at"],
+                    )
+                    for row in response.data or []
+                ]
+            except Exception as error:
+                raise ProfilePersistenceError(
+                    "Supabase profile list failed."
+                ) from error
 
         # In-memory slice
         all_records = list(_in_memory_store.values())[offset : offset + limit]
@@ -121,7 +144,7 @@ class ProfileService:
 
     @staticmethod
     def update_profile(profile_id: str, payload: CandidateProfilePayload) -> Optional[ProfileResponse]:
-        client = get_supabase_client()
+        client = _get_profile_client()
         now = _get_utc_now_iso()
 
         if client:
@@ -141,8 +164,11 @@ class ProfileService:
                         created_at=row["created_at"],
                         updated_at=row["updated_at"],
                     )
-            except Exception as e:
-                print(f"[Supabase Update Error] {e}.")
+                return None
+            except Exception as error:
+                raise ProfilePersistenceError(
+                    "Supabase update failed; the profile was not confirmed updated."
+                ) from error
 
         if profile_id in _in_memory_store:
             record = _in_memory_store[profile_id]
@@ -158,13 +184,15 @@ class ProfileService:
 
     @staticmethod
     def delete_profile(profile_id: str) -> bool:
-        client = get_supabase_client()
+        client = _get_profile_client()
         if client:
             try:
                 response = client.table("candidate_profiles").delete().eq("id", profile_id).execute()
                 return bool(response.data and len(response.data) > 0)
-            except Exception as e:
-                print(f"[Supabase Delete Error] {e}.")
+            except Exception as error:
+                raise ProfilePersistenceError(
+                    "Supabase delete failed; the profile was not confirmed deleted."
+                ) from error
 
         if profile_id in _in_memory_store:
             del _in_memory_store[profile_id]

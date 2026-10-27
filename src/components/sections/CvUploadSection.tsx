@@ -142,16 +142,16 @@ export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChan
               <h2 className="text-base sm:text-lg font-bold text-[#20243A]">Curriculum Vitae (CV)</h2>
               {cvFile ? (
                 <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#F0EEFA] text-[#4F46BA] border border-[#DCD8F0]">
-                  Attached
+                  Selected locally
                 </span>
               ) : (
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#FDF6E8] text-[#925B0B] border border-[#F4E3BF]">
-                  Required
+                <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#F5F4FA] text-[#73778C] border border-[#E8E6F0]">
+                  Optional
                 </span>
               )}
             </div>
             <p className="text-xs text-[#73778C]">
-              Attach your latest resume document for recruiter review.
+              Select a PDF or DOCX for a local preview. CV upload and resume parsing are not available yet; you can complete your profile manually without a CV.
             </p>
           </div>
         </div>
@@ -313,9 +313,9 @@ export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChan
                     File size: {cvFile.fileSizeFormatted} · Type: {cvFile.fileType || 'Document'}
                   </p>
                   <div className="mt-4 max-w-md mx-auto p-3.5 rounded-xl bg-[#FDF6E8] border border-[#F4E3BF] text-xs text-[#925B0B] text-left">
-                    <p className="font-semibold text-[#8B5812] mb-1">DOCX / Binary Notice:</p>
+                    <p className="font-semibold text-[#8B5812] mb-1">Local-only file selection:</p>
                     <p>
-                      Modern web browsers cannot natively render Microsoft Word (.docx) files without remote conversion services. The document is safely stored in local browser memory and will be attached to your candidate profile package.
+                      The file is not uploaded or parsed. Resume parsing and parser-based profile prefill are pending the Role 2 integration.
                     </p>
                   </div>
                 </div>

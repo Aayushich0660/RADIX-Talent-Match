@@ -68,15 +68,15 @@ export function isValidEducation(edu: {
 /**
  * Calculates profile completion from actual form state.
  *
- * The six core requirements:
+ * The five required profile fields:
  * 1. Full name entered (non-empty after trim)
  * 2. Valid email entered (proper format after trim)
  * 3. At least one complete education record (both degree and institution)
  * 4. At least one valid skill (non-empty name & permitted RADIX category)
  * 5. At least one preferred role
- * 6. A valid CV file selected (PDF or DOCX within size limit)
+ * CV selection is optional and does not block profile readiness.
  *
- * Each requirement counts equally toward the completion percentage (1/6 = 16.67%).
+ * Each required milestone counts equally toward the completion percentage.
  */
 export function calculateProfileCompletion(state: CandidateProfileState): ProfileCompletionResult {
   const hasValidName = validateName(state.personal.fullName).isValid;
@@ -126,15 +126,16 @@ export function calculateProfileCompletion(state: CandidateProfileState): Profil
     },
     {
       id: 'cv',
-      label: 'CV Document Attached',
+      label: 'CV (optional)',
       isComplete: hasCv,
-      isRequired: true,
-      hint: 'Attach a valid PDF or DOCX resume file',
+      isRequired: false,
+      hint: 'Optional: select a PDF or DOCX for a local preview; upload and parsing are not available yet',
     },
   ];
 
-  const totalRequiredCount = milestones.length; // 6
-  const completedCount = milestones.filter((m) => m.isComplete).length;
+  const requiredMilestones = milestones.filter((milestone) => milestone.isRequired);
+  const totalRequiredCount = requiredMilestones.length;
+  const completedCount = requiredMilestones.filter((milestone) => milestone.isComplete).length;
   // Equal weighting: (completed / totalRequired) * 100
   const totalScore = Math.round((completedCount / totalRequiredCount) * 100);
 

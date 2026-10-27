@@ -5,7 +5,7 @@ FastAPI Routes for Candidate Profile CRUD operations.
 from typing import List
 from fastapi import APIRouter, HTTPException, Query, status
 from app.models import CandidateProfilePayload, ProfileResponse
-from app.services.profile_service import ProfileService
+from app.services.profile_service import ProfilePersistenceError, ProfileService
 
 router = APIRouter(prefix="/api/profiles", tags=["Profiles"])
 
@@ -21,6 +21,8 @@ def create_profile(payload: CandidateProfilePayload):
         return saved
     except ValueError as val_err:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(val_err))
+    except ProfilePersistenceError as persistence_error:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(persistence_error)) from persistence_error
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to save profile: {str(e)}")
 
@@ -33,7 +35,10 @@ def list_profiles(
     """
     Retrieves saved candidate profiles with pagination.
     """
-    return ProfileService.list_profiles(limit=limit, offset=offset)
+    try:
+        return ProfileService.list_profiles(limit=limit, offset=offset)
+    except ProfilePersistenceError as persistence_error:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(persistence_error)) from persistence_error
 
 
 @router.get("/{profile_id}", response_model=ProfileResponse)
@@ -41,7 +46,10 @@ def get_profile(profile_id: str):
     """
     Retrieves a single saved profile using its persistent UUID identifier.
     """
-    profile = ProfileService.get_profile(profile_id)
+    try:
+        profile = ProfileService.get_profile(profile_id)
+    except ProfilePersistenceError as persistence_error:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(persistence_error)) from persistence_error
     if not profile:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -55,7 +63,10 @@ def update_profile(profile_id: str, payload: CandidateProfilePayload):
     """
     Updates an existing candidate profile after validating incoming information.
     """
-    updated = ProfileService.update_profile(profile_id, payload)
+    try:
+        updated = ProfileService.update_profile(profile_id, payload)
+    except ProfilePersistenceError as persistence_error:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(persistence_error)) from persistence_error
     if not updated:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -69,7 +80,10 @@ def delete_profile(profile_id: str):
     """
     Deletes a candidate profile.
     """
-    success = ProfileService.delete_profile(profile_id)
+    try:
+        success = ProfileService.delete_profile(profile_id)
+    except ProfilePersistenceError as persistence_error:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(persistence_error)) from persistence_error
     if not success:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
