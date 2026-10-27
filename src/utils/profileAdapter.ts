@@ -15,7 +15,7 @@ export function profileToFormState(profile: RadixExportProfile): CandidateProfil
       email: profile.email,
       phone: phoneCountry ? phone.slice(phoneCountry.code.length).trim() : phone,
       countryCode: phoneCountry?.code ?? '+91',
-      cityCountry: '',
+      cityCountry: profile.city_country ?? '',
     },
     education: profile.education.map((item, index) => ({
       id: `loaded-education-${Date.now()}-${index}`,
@@ -23,6 +23,7 @@ export function profileToFormState(profile: RadixExportProfile): CandidateProfil
       fieldOfStudy: item.field_of_study,
       institution: item.institution,
       graduationYear: item.graduation_year,
+      cgpa: item.cgpa ?? '',
     })),
     skills: profile.skills.map((item, index) => ({
       id: `loaded-skill-${Date.now()}-${index}`,

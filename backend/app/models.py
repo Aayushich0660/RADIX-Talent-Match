@@ -37,6 +37,7 @@ class EducationModel(BaseModel):
     field_of_study: str = Field(default="", description="Specialization or major")
     institution: str = Field(..., description="University, college, or school name")
     graduation_year: str = Field(default="", description="Year of graduation or expected")
+    cgpa: str = Field(default="", description="Explicitly reported cumulative GPA")
 
     @field_validator('degree', 'institution', mode='before')
     @classmethod
@@ -98,6 +99,7 @@ class CandidateProfilePayload(BaseModel):
     name: str = Field(..., min_length=2, description="Candidate full name (no numbers allowed)")
     email: str = Field(..., description="Valid candidate email address")
     phone: Optional[str] = Field(default=None, description="Formatted phone with country dial code or null")
+    city_country: str = Field(default="", description="Candidate city and country")
     education: List[EducationModel] = Field(default_factory=list)
     skills: List[SkillModel] = Field(default_factory=list)
     hackathons: List[HackathonProjectModel] = Field(default_factory=list)

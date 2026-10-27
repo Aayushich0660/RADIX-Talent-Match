@@ -36,6 +36,7 @@ export const EducationSection: React.FC<EducationSectionProps> = ({ records, onC
       fieldOfStudy: '',
       institution: '',
       graduationYear: '',
+      cgpa: '',
     };
     onChange([...records, newRecord]);
   };
@@ -307,7 +308,7 @@ export const EducationSection: React.FC<EducationSectionProps> = ({ records, onC
                   </div>
 
                   {/* Institution / University */}
-                  <div className="sm:col-span-1 lg:col-span-3">
+                  <div className="sm:col-span-1 lg:col-span-2">
                     <label
                       htmlFor={`institution-${record.id}`}
                       className="block text-xs font-semibold text-[#20243A] mb-1"
@@ -365,6 +366,25 @@ export const EducationSection: React.FC<EducationSectionProps> = ({ records, onC
                         className="w-full pl-8 pr-3 py-1.5 text-sm rounded-lg border border-[#E8E6F0] focus:border-[#6558D9] focus:ring-3 focus:ring-[#6558D9]/10 bg-white text-[#20243A] placeholder-[#9E9EAF] focus:outline-none transition-all"
                       />
                     </div>
+                  </div>
+
+                  {/* CGPA */}
+                  <div className="sm:col-span-1 lg:col-span-1">
+                    <label
+                      htmlFor={`cgpa-${record.id}`}
+                      className="block text-xs font-semibold text-[#20243A] mb-1"
+                    >
+                      CGPA
+                    </label>
+                    <input
+                      id={`cgpa-${record.id}`}
+                      aria-label={`CGPA for entry #${index + 1}`}
+                      type="text"
+                      value={record.cgpa ?? ''}
+                      onChange={(e) => handleUpdate(record.id, 'cgpa', e.target.value)}
+                      placeholder="e.g. 8.6/10"
+                      className="w-full px-3 py-1.5 text-sm rounded-lg border border-[#E8E6F0] focus:border-[#6558D9] focus:ring-3 focus:ring-[#6558D9]/10 bg-white text-[#20243A] placeholder-[#9E9EAF] focus:outline-none transition-all"
+                    />
                   </div>
                 </div>
               </div>

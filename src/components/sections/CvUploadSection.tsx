@@ -7,23 +7,27 @@ import {
   Eye,
   AlertCircle,
   X,
+  LoaderCircle,
+  WandSparkles,
 } from 'lucide-react';
 import { CvFileState } from '../../types/profile';
 
 interface CvUploadSectionProps {
   cvFile: CvFileState | null;
   onChange: (fileState: CvFileState | null) => void;
+  onParse: (file: File) => void;
+  isParsing: boolean;
 }
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
 const ALLOWED_EXTENSIONS = ['.pdf', '.docx'];
-const ALLOWED_MIME_TYPES = [
-  'application/pdf',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'application/msword',
-];
 
-export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChange }) => {
+export const CvUploadSection: React.FC<CvUploadSectionProps> = ({
+  cvFile,
+  onChange,
+  onParse,
+  isParsing,
+}) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -47,6 +51,11 @@ export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChan
   const processSelectedFile = (file: File) => {
     setErrorMessage(null);
 
+    if (file.size === 0) {
+      setErrorMessage('The selected file is empty.');
+      return;
+    }
+
     // Validate size
     if (file.size > MAX_FILE_SIZE_BYTES) {
       setErrorMessage(`File exceeds the 10 MB maximum size limit (${formatFileSize(file.size)}).`);
@@ -56,9 +65,7 @@ export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChan
     // Validate extension
     const extension = `.${file.name.split('.').pop()?.toLowerCase()}`;
     const isValidExtension = ALLOWED_EXTENSIONS.includes(extension);
-    const isValidMime = ALLOWED_MIME_TYPES.includes(file.type);
-
-    if (!isValidExtension && !isValidMime) {
+    if (!isValidExtension) {
       setErrorMessage(
         `Invalid file format ("${file.name}"). Only PDF (.pdf) and Word documents (.docx) are supported.`
       );
@@ -151,7 +158,7 @@ export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChan
               )}
             </div>
             <p className="text-xs text-[#73778C]">
-              Select a PDF or DOCX for a local preview. CV upload and resume parsing are not available yet; you can complete your profile manually without a CV.
+              Select a PDF or DOCX, then explicitly parse it to propose editable profile details. The CV is not stored; manual entry works without a CV.
             </p>
           </div>
         </div>
@@ -203,7 +210,7 @@ export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChan
           </div>
 
           <p className="mt-3 text-[11px] text-[#73778C]">
-            Note: The file is retained locally in browser memory and is not uploaded to a remote server.
+            The file stays in browser memory until you choose Parse resume. Parsing sends it to the local Role 2 service; it is not saved with your profile.
           </p>
         </div>
       ) : (
@@ -225,16 +232,30 @@ export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChan
                 <div className="flex items-center gap-2 mt-1 text-xs text-[#73778C]">
                   <span>Type: {isPdf ? 'PDF Document' : 'Word DOCX Document'}</span>
                   <span>·</span>
-                  <span>Selected in local memory</span>
+                  <span>                  Selected in browser memory</span>
                 </div>
               </div>
             </div>
 
             {/* Actions on attached file */}
-            <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
+            <div className="flex flex-wrap items-center gap-2 self-start sm:self-center shrink-0">
+              <button
+                type="button"
+                onClick={() => cvFile.file && onParse(cvFile.file)}
+                disabled={isParsing || !cvFile.file}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-[#6558D9] hover:bg-[#5346C8] rounded-lg shadow-2xs transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isParsing ? (
+                  <LoaderCircle className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <WandSparkles className="w-3.5 h-3.5" />
+                )}
+                <span>{isParsing ? 'Parsing resume...' : 'Parse resume'}</span>
+              </button>
               <button
                 type="button"
                 onClick={() => setShowPreviewModal(true)}
+                disabled={isParsing}
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[#20243A] bg-white hover:bg-[#F0EEFA] border border-[#E8E6F0] rounded-lg shadow-2xs transition-colors"
               >
                 <Eye className="w-3.5 h-3.5 text-[#6558D9]" />
@@ -244,6 +265,7 @@ export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChan
               <button
                 type="button"
                 onClick={handleTriggerBrowse}
+                disabled={isParsing}
                 className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-[#73778C] bg-white hover:bg-[#F5F4FA] border border-[#E8E6F0] rounded-lg shadow-2xs transition-colors"
                 title="Replace with another file"
               >
@@ -254,6 +276,7 @@ export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChan
               <button
                 type="button"
                 onClick={handleRemove}
+                disabled={isParsing}
                 className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium text-rose-600 hover:bg-rose-50 border border-rose-200 rounded-lg transition-colors"
                 title="Remove attached CV"
               >
@@ -313,9 +336,9 @@ export const CvUploadSection: React.FC<CvUploadSectionProps> = ({ cvFile, onChan
                     File size: {cvFile.fileSizeFormatted} · Type: {cvFile.fileType || 'Document'}
                   </p>
                   <div className="mt-4 max-w-md mx-auto p-3.5 rounded-xl bg-[#FDF6E8] border border-[#F4E3BF] text-xs text-[#925B0B] text-left">
-                    <p className="font-semibold text-[#8B5812] mb-1">Local-only file selection:</p>
+                          <p className="font-semibold text-[#8B5812] mb-1">Local file storage:</p>
                     <p>
-                      The file is not uploaded or parsed. Resume parsing and parser-based profile prefill are pending the Role 2 integration.
+                            The file is not stored by Role 3. Parsing sends it to the local Role 2 parser only when you explicitly choose Parse resume.
                     </p>
                   </div>
                 </div>

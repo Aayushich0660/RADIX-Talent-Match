@@ -16,11 +16,15 @@ import { calculateProfileCompletion } from './utils/completion';
 import { INITIAL_EMPTY_PROFILE, SAMPLE_CANDIDATE_PROFILE } from './utils/sampleData';
 import { exportToRadixProfileJSON } from './utils/exportProfile';
 import { deleteProfile, loadProfile, saveProfile } from './api/profileApi';
+import { parseResumeFile } from './api/resumeParser';
 import { profileToFormState } from './utils/profileAdapter';
+import { mergeParsedResume } from './utils/resumeAdapter';
 import { AlertCircle, CheckCircle2, Eye, LoaderCircle, Save, Trash2 } from 'lucide-react';
 
 export default function App() {
   const [profileState, setProfileState] = useState<CandidateProfileState>(INITIAL_EMPTY_PROFILE);
+  const profileStateRef = useRef(profileState);
+  profileStateRef.current = profileState;
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'info' } | null>(
     null
@@ -34,7 +38,12 @@ export default function App() {
   const [profileIdToLoad, setProfileIdToLoad] = useState('');
   const [savedProfileId, setSavedProfileId] = useState<string | null>(null);
   const requestInFlight = useRef(false);
-
+  const parserInFlight = useRef(false);
+  const [isParsing, setIsParsing] = useState(false);
+  const [parserAlert, setParserAlert] = useState<{
+    message: string;
+    type: 'success' | 'error';
+  } | null>(null);
   const showNotification = (message: string, type: 'success' | 'info' = 'success') => {
     setNotification({ message, type });
     setTimeout(() => {
@@ -91,6 +100,7 @@ export default function App() {
     setSavedProfileId(null);
     setProfileIdToLoad('');
     setApiNotification(null);
+    setParserAlert(null);
     showNotification('Sample candidate profile loaded successfully for demonstration.');
   };
 
@@ -102,7 +112,41 @@ export default function App() {
     setSavedProfileId(null);
     setProfileIdToLoad('');
     setApiNotification(null);
+    setParserAlert(null);
     showNotification('Profile form cleared.', 'info');
+  };
+
+  const handleCvChange = (cvFile: CandidateProfileState['cvFile']) => {
+    setProfileState((prev) => ({ ...prev, cvFile }));
+    setParserAlert(null);
+  };
+
+  const handleParseResume = async (file: File) => {
+    if (parserInFlight.current) return;
+    parserInFlight.current = true;
+    setIsParsing(true);
+    setParserAlert(null);
+
+    try {
+      const parsed = await parseResumeFile(file);
+      const merged = mergeParsedResume(profileStateRef.current, parsed, file.name);
+      profileStateRef.current = merged.profile;
+      setProfileState(merged.profile);
+      setParserAlert({
+        type: 'success',
+        message: 'Resume details were added to the editable profile form. Review them before saving.',
+      });
+    } catch (error) {
+      setParserAlert({
+        type: 'error',
+        message: error instanceof Error
+          ? error.message
+          : 'Resume parsing failed. You can continue entering the profile manually.',
+      });
+    } finally {
+      parserInFlight.current = false;
+      setIsParsing(false);
+    }
   };
 
   const handleSaveProfile = async () => {
@@ -144,6 +188,7 @@ export default function App() {
       const record = await loadProfile(profileId);
       setProfileState(profileToFormState(record.profile));
       setSavedProfileId(record.id);
+      setParserAlert(null);
       setApiNotification({
         message: `Profile ${record.id} was loaded from the backend.`,
         type: 'success',
@@ -248,9 +293,22 @@ export default function App() {
             {/* Section 8: CV Upload */}
             <CvUploadSection
               cvFile={profileState.cvFile}
-              onChange={(cvFile) => setProfileState((prev) => ({ ...prev, cvFile }))}
+              onChange={handleCvChange}
+              onParse={handleParseResume}
+              isParsing={isParsing}
             />
-
+            {parserAlert && (
+              <div
+                role={parserAlert.type === 'error' ? 'alert' : 'status'}
+                className={`rounded-xl border p-4 text-xs ${
+                  parserAlert.type === 'error'
+                    ? 'border-rose-200 bg-rose-50 text-rose-700'
+                    : 'border-emerald-200 bg-emerald-50 text-emerald-800'
+                }`}
+              >
+                {parserAlert.message}
+              </div>
+            )}
             {/* Form Footer Action Bar */}
             <div className="bg-white rounded-2xl border border-[#E8E6F0] p-6 shadow-xs space-y-5">
               <div className="text-xs text-[#73778C]">

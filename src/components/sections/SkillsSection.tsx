@@ -158,7 +158,7 @@ export const SkillsSection: React.FC<SkillsSectionProps> = ({ skills, onChange }
               </span>
             </div>
             <p className="text-xs text-[#73778C]">
-              Categorize competencies using the official 13 RADIX taxonomy domains.
+              Categorize competencies using 12 RADIX skill categories plus OTHER.
             </p>
           </div>
         </div>

@@ -260,7 +260,7 @@ export function runContractAudit() {
   const mockProfileWithMixedEdu: CandidateProfileState = {
     personal: { fullName: 'Alex Morgan', email: 'alex@example.com', phone: '', countryCode: '+91', cityCountry: '' },
     education: [
-      { id: '1', degree: "Master's Degree", fieldOfStudy: 'Data Science', institution: 'Stanford', graduationYear: '2026' },
+      { id: '1', degree: "Master's Degree", fieldOfStudy: 'Data Science', institution: 'Stanford', graduationYear: '2026', cgpa: '3.8/4.0' },
       { id: '2', degree: 'Double Major B.S.', fieldOfStudy: 'Cognitive Science', institution: 'MIT', graduationYear: '2024' },
       { id: '3', degree: '   ', fieldOfStudy: '', institution: '', graduationYear: '' }, // Blank entry
     ],
@@ -276,12 +276,13 @@ export function runContractAudit() {
   assert('Blank education entry is excluded from exported JSON', exportedMixed.education.length === 2);
   assert('Preset education record degree is preserved in exported JSON', exportedMixed.education[0].degree === "Master's Degree");
   assert('Preset education record field is preserved in exported JSON', exportedMixed.education[0].field_of_study === 'Data Science');
+  assert('Education CGPA is preserved in the shared profile export', exportedMixed.education[0].cgpa === '3.8/4.0');
   assert('Custom "Other" education degree is preserved in exported JSON', exportedMixed.education[1].degree === 'Double Major B.S.');
   assert('Custom "Other" field of study is preserved in exported JSON', exportedMixed.education[1].field_of_study === 'Cognitive Science');
 
   // Education string serialization helper
   const serialized = serializeEducationToString(exportedMixed.education);
-  assert('serializeEducationToString formats preset degree', serialized.includes("Master's Degree in Data Science at Stanford (2026)"));
+  assert('serializeEducationToString formats preset degree and CGPA', serialized.includes("Master's Degree in Data Science at Stanford (2026) CGPA 3.8/4.0"));
   assert('serializeEducationToString formats custom degree', serialized.includes('Double Major B.S. in Cognitive Science at MIT (2024)'));
 
   // ==========================================
@@ -377,6 +378,7 @@ export function runContractAudit() {
     'Exported profile uses the exact shared top-level fields',
     JSON.stringify(Object.keys(exported).sort()) === JSON.stringify([
       'certifications',
+      'city_country',
       'cv_file',
       'education',
       'email',
@@ -392,6 +394,7 @@ export function runContractAudit() {
   assert('Exported phone is non-null and formatted with country code', exported.phone === '+91 9876543210');
   assert('Exported name is trimmed', exported.name === 'Aarav Sharma');
   assert('Exported email is trimmed', exported.email === 'aarav.sharma@iitb.ac.in');
+  assert('Exported profile preserves City & Country', exported.city_country === 'Mumbai, India');
   assert('Exported education preserves structured array', Array.isArray(exported.education) && exported.education.length === 1);
   assert('Exported skills preserves category_code DSA', exported.skills[0].category_code === 'DSA');
   assert('Exported cv_file is string filename', exported.cv_file === 'aarav_sharma_resume.pdf');
@@ -410,6 +413,7 @@ export function runContractAudit() {
     'Loading and re-exporting the shared profile preserves its JSON contract',
     JSON.stringify(exportToRadixProfileJSON(profileToFormState(exported))) === JSON.stringify(exported)
   );
+  assert('Loading a saved profile restores City & Country to the form', profileToFormState(exported).personal.cityCountry === 'Mumbai, India');
 
   console.log(`\n=== AUDIT SUMMARY: ${passed} PASSED, ${failed} FAILED ===\n`);
   return { passed, failed };

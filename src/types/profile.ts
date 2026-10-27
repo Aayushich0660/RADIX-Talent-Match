@@ -175,6 +175,7 @@ export interface EducationRecord {
   fieldOfStudy: string;
   institution: string;
   graduationYear: string;
+  cgpa?: string;
 }
 
 export interface SkillRecord {
@@ -247,6 +248,7 @@ export interface RadixExportEducation {
   field_of_study: string;
   institution: string;
   graduation_year: string;
+  cgpa?: string;
 }
 
 export interface RadixExportHackathonProject {
@@ -289,6 +291,7 @@ export interface RadixExportProfile {
   name: string;
   email: string;
   phone: string | null;
+  city_country: string;
   education: RadixExportEducation[];
   skills: RadixExportSkill[];
   hackathons: RadixExportHackathonProject[];

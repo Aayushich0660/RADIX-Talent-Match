@@ -41,11 +41,13 @@ export function isMeaningfulEducation(edu: {
   degree?: string;
   institution?: string;
   fieldOfStudy?: string;
+  cgpa?: string;
 }): boolean {
   return Boolean(
     (edu.degree && edu.degree.trim().length > 0) ||
     (edu.institution && edu.institution.trim().length > 0) ||
-    (edu.fieldOfStudy && edu.fieldOfStudy.trim().length > 0)
+    (edu.fieldOfStudy && edu.fieldOfStudy.trim().length > 0) ||
+    (edu.cgpa && edu.cgpa.trim().length > 0)
   );
 }
 
@@ -129,7 +131,7 @@ export function calculateProfileCompletion(state: CandidateProfileState): Profil
       label: 'CV (optional)',
       isComplete: hasCv,
       isRequired: false,
-      hint: 'Optional: select a PDF or DOCX for a local preview; upload and parsing are not available yet',
+      hint: 'Optional: select a PDF or DOCX for local preview or parser-based form prefill',
     },
   ];
 

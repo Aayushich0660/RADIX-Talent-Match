@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 
 from app.main import app
-from app.models import CandidateProfilePayload, RadixCategoryCode, SkillModel
+from app.models import CandidateProfilePayload, EducationModel, RadixCategoryCode, SkillModel
 from app.services import profile_service
 from typing import get_args
 
@@ -72,6 +72,7 @@ def test_backend_models_match_shared_profile_contract():
         "name",
         "email",
         "phone",
+        "city_country",
         "education",
         "skills",
         "hackathons",
@@ -86,6 +87,7 @@ def test_backend_models_match_shared_profile_contract():
         "evidence",
         "confidence",
     }
+    assert EducationModel.model_fields["cgpa"].default == ""
     assert set(get_args(RadixCategoryCode)) == {
         "COD",
         "DSA",
@@ -101,6 +103,72 @@ def test_backend_models_match_shared_profile_contract():
         "OS",
         "OTHER",
     }
+
+
+def test_city_country_survives_profile_save_and_load_without_database(monkeypatch):
+    monkeypatch.setattr(profile_service, "is_supabase_configured", lambda: False)
+    monkeypatch.setattr(profile_service, "get_supabase_client", lambda: None)
+    client = TestClient(app)
+    payload = {**PROFILE_PAYLOAD, "city_country": "Delhi"}
+
+    created = client.post("/api/profiles", json=payload)
+
+    assert created.status_code == 201
+    profile_id = created.json()["id"]
+    assert created.json()["profile"]["city_country"] == "Delhi"
+
+    loaded = client.get(f"/api/profiles/{profile_id}")
+
+    assert loaded.status_code == 200
+    assert loaded.json()["profile"]["city_country"] == "Delhi"
+
+
+def test_education_cgpa_survives_create_update_and_reload(monkeypatch):
+    monkeypatch.setattr(profile_service, "is_supabase_configured", lambda: False)
+    monkeypatch.setattr(profile_service, "get_supabase_client", lambda: None)
+    client = TestClient(app)
+    education = [{
+        "degree": "B.Tech",
+        "field_of_study": "Computer Science",
+        "institution": "",
+        "graduation_year": "2026",
+        "cgpa": "8.6/10",
+    }]
+
+    created = client.post("/api/profiles", json={**PROFILE_PAYLOAD, "education": education})
+
+    assert created.status_code == 201
+    profile_id = created.json()["id"]
+    assert created.json()["profile"]["education"][0]["cgpa"] == "8.6/10"
+    assert client.get(f"/api/profiles/{profile_id}").json()["profile"]["education"][0]["cgpa"] == "8.6/10"
+
+    updated = client.put(
+        f"/api/profiles/{profile_id}",
+        json={**PROFILE_PAYLOAD, "education": [{**education[0], "cgpa": "8.7/10"}]},
+    )
+
+    assert updated.status_code == 200
+    assert updated.json()["profile"]["education"][0]["cgpa"] == "8.7/10"
+    assert client.get(f"/api/profiles/{profile_id}").json()["profile"]["education"][0]["cgpa"] == "8.7/10"
+
+
+def test_education_without_cgpa_remains_backward_compatible(monkeypatch):
+    monkeypatch.setattr(profile_service, "is_supabase_configured", lambda: False)
+    monkeypatch.setattr(profile_service, "get_supabase_client", lambda: None)
+    client = TestClient(app)
+    legacy_education = [{
+        "degree": "B.Tech",
+        "field_of_study": "Computer Science",
+        "institution": "",
+        "graduation_year": "2026",
+    }]
+
+    created = client.post("/api/profiles", json={**PROFILE_PAYLOAD, "education": legacy_education})
+
+    assert created.status_code == 201
+    assert created.json()["profile"]["education"][0]["cgpa"] == ""
+    profile_id = created.json()["id"]
+    assert client.get(f"/api/profiles/{profile_id}").json()["profile"]["education"][0]["cgpa"] == ""
 
 
 def test_configured_but_unavailable_client_does_not_use_memory(monkeypatch):

@@ -46,6 +46,7 @@ export function exportToRadixProfileJSON(state: CandidateProfileState): RadixExp
       field_of_study: edu.fieldOfStudy.trim(),
       institution: edu.institution.trim(),
       graduation_year: edu.graduationYear.trim(),
+      cgpa: edu.cgpa?.trim() ?? '',
     }));
 
   // 2. Clean and filter technical skills
@@ -126,6 +127,7 @@ export function exportToRadixProfileJSON(state: CandidateProfileState): RadixExp
     name: state.personal.fullName.trim(),
     email: state.personal.email.trim(),
     phone,
+    city_country: state.personal.cityCountry.trim(),
     education,
     skills,
     hackathons,
@@ -149,6 +151,7 @@ export function serializeEducationToString(education: RadixExportEducation[]): s
         edu.field_of_study ? `in ${edu.field_of_study}` : null,
         edu.institution ? `at ${edu.institution}` : null,
         edu.graduation_year ? `(${edu.graduation_year})` : null,
+        edu.cgpa ? `CGPA ${edu.cgpa}` : null,
       ].filter(Boolean);
       return parts.join(' ');
     })

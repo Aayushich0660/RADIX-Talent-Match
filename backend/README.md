@@ -8,7 +8,7 @@ This Python FastAPI service provides validation, Supabase persistence, and retri
 
 - **Framework:** FastAPI with Pydantic v2 data models.
 - **Database:** Supabase (PostgreSQL with JSONB structured profile storage).
-- **Data Exchange:** RADIX shared candidate-profile JSON contract for consumers such as Roles 4 and 5. Role 2 resume parsing is not implemented yet.
+- **Data Exchange:** RADIX shared candidate-profile JSON contract for consumers such as Roles 4 and 5. The isolated Role 2 parser runs as a separate service.
 
 ---
 
@@ -40,8 +40,8 @@ CREATE INDEX IF NOT EXISTS idx_candidate_profiles_created ON candidate_profiles(
 cd backend
 
 # 2. Create and activate a Python virtual environment
-python3 -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+python -m venv .venv
+source .venv/bin/activate  # On Windows PowerShell: .\.venv\Scripts\Activate.ps1
 
 # 3. Install dependencies
 pip install -r requirements.txt
@@ -63,7 +63,7 @@ uvicorn app.main:app --reload --port 8000
 - Health check: `http://localhost:8000/api/health`
 
 On Windows, from the repository root, run `cd backend` and then
-`python -m uvicorn app.main:app --reload --port 8000`.
+`.\.venv\Scripts\python.exe -m uvicorn app.main:app --reload --port 8000`.
 
 The backend loads `backend/.env` when present, regardless of the launch
 directory. If that file is absent, it falls back to the repository-root `.env`.
@@ -81,7 +81,50 @@ credentials in the backend environment only, never in Vite `VITE_*` variables.
 
 ---
 
-## 5. API Endpoints
+## 5. Role 2 Resume Parser Integration
+
+The integrated copy of the Role 2 parser source lives in `backend/resume_parser/`;
+the original sibling `resume_parsing` project is not modified. Its dependencies
+are installed in a separate virtual environment:
+
+```powershell
+cd backend\resume_parser
+py -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe -m uvicorn api:app --reload --host 127.0.0.1 --port 8002
+```
+
+Role 2 exposes `GET /health` and `POST /parse-resume` with multipart field
+`file`. The integrated service defaults to the offline heuristic and does not
+need paid credentials. To opt in to LLM extraction, set `RESUME_PARSER_USE_LLM=true`
+and `ANTHROPIC_API_KEY` only in the parser process environment. The browser never
+receives the key. LLM mode sends resume text to Anthropic; offline heuristic mode
+does not. PDF and DOCX uploads are limited to 10 MiB; extension and file
+signatures are checked, malformed/empty documents are rejected, and temporary
+files are removed after parsing.
+
+Vite proxies `/parser/parse-resume` to the parser service's `/parse-resume`
+route on port 8002. The browser only sends a resume when the user explicitly
+clicks **Parse resume**. Parser output is proposed in the existing editable form;
+it never saves automatically. Candidate contact details, education, skills,
+projects, and certification names map into corresponding Role 3 fields.
+Existing non-empty contact values are retained and conflicts are shown.
+Role 2 experience has a free-form duration string that does not match Role 3's
+internship dates, so it remains visible in a review-only area rather than being
+silently treated as an internship. The Role 3 API persists only the filename in
+`cv_file`, not the uploaded file contents.
+
+The actual Role 2 schema declares `candidate` as a non-null object containing
+string `name`, `email`, and `phone` (defaulting to empty strings). `education`
+items have string `institution`, `degree`, `field` and nullable string
+`start_year`, `end_year`, `grade`, and explicitly extracted `cgpa`; `projects` have string `title`, `description`
+and string-array `technologies`; `experience` has string `company`, `role`,
+`duration`, `description` and string-array `technologies`; certifications are
+strings. Skills use `skill_name`, one of the 13 shared RADIX category codes,
+`evidence`, and `confidence` (`high`, `medium`, or `low`). The frontend still
+guards nullable/malformed optional data at its boundary.
+
+## 6. API Endpoints
 
 ### `POST /api/profiles`
 Create a new candidate profile. The API returns `201 Created` with a record
@@ -98,7 +141,8 @@ containing `id`, `profile`, `created_at`, and `updated_at`.
       "degree": "Bachelor's Degree",
       "field_of_study": "Computer Science",
       "institution": "University of California, Berkeley",
-      "graduation_year": "2025"
+      "graduation_year": "2025",
+      "cgpa": "3.8/4.0"
     }
   ],
   "skills": [
@@ -143,14 +187,15 @@ Delete a candidate profile.
 
 The shared contract uses these top-level fields: `name` (string), `email`
 (string), `phone` (string or null), `education` (array of objects containing
-`degree`, `field_of_study`, `institution`, and `graduation_year`), `skills`
+`degree`, `field_of_study`, `institution`, `graduation_year`, and `cgpa`), `skills`
 (array containing `skill_name`, `category_code`, `evidence`, and `confidence`),
 `hackathons`, `internships`, `certifications`, `preferred_roles` (string
 array), and `cv_file` (string or null). Skill category codes are `COD`, `DSA`,
 `OOD`, `APTI`, `COMM`, `AI`, `CLOUD`, `SQL`, `SWE`, `SYSD`, `NETW`, `OS`, and
 `OTHER`; confidence is `high`, `medium`, `low`, or null.
 
-All education fields are strings. Hackathon/project records contain `type`
+Education `cgpa` is optional for older clients and profiles; when omitted, it
+defaults to an empty string. Hackathon/project records contain `type`
 (`hackathon` or `project`), `name`, `title`, `description`, `technologies`
 (string array), and `date_or_year`. Internship records contain `company`,
 `role`, `start_date`, `end_date`, `is_ongoing` (boolean), `description`, and
@@ -206,4 +251,5 @@ The response is the stored record envelope:
 
 Roles 4 and 5 should consume `response.profile` using this existing schema; the
 profile ID and timestamps are envelope metadata. No parser-specific fields are
-added. Role 2 resume parsing and parser-based prefill are not implemented.
+added. Role 2 parser-to-form mapping is described above. No resume file contents
+are added to the shared profile contract or stored by the Profile Builder.

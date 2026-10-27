@@ -14,11 +14,6 @@ export const PageIntro: React.FC<PageIntroProps> = ({ completion }) => {
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         {/* Left: Titles */}
         <div className="max-w-2xl">
-          <div className="flex items-center gap-2 mb-2.5">
-            <span className="text-[11px] font-semibold tracking-wider text-[#6558D9] bg-[#F0EEFA] border border-[#E8E6F0] px-2.5 py-0.5 rounded-md uppercase">
-              Role 3 · Talent Readiness Platform
-            </span>
-          </div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#20243A] text-balance">
             Build your candidate profile
           </h1>
