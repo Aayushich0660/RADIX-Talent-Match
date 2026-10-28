@@ -1,0 +1,164 @@
+{
+  "source_type": "jd",
+  "source_file": "Google LLC - Data Scientist.pdf",
+  "company": "Google LLC",
+  "role": "Data Scientist",
+  "skills": [
+    {
+      "skill_name": "A/B testing",
+      "category_code": "DSA",
+      "evidence": "Design and run experiments (A/B tests) and interpret their results rigorously",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "SQL",
+      "category_code": "SQL",
+      "evidence": "Write efficient, production-grade SQL against very large datasets",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Schema design",
+      "category_code": "SQL",
+      "evidence": "including schema design and query optimization",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Query optimization",
+      "category_code": "SQL",
+      "evidence": "including schema design and query optimization",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Predictive modeling",
+      "category_code": "AI",
+      "evidence": "Build and evaluate predictive models, applying sound statistical judgment",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Statistical judgment",
+      "category_code": "AI",
+      "evidence": "applying sound statistical judgment",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Collaboration with engineering",
+      "category_code": "COMM",
+      "evidence": "Partner with engineering and product teams to turn analysis into shipped features",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Collaboration with product teams",
+      "category_code": "COMM",
+      "evidence": "Partner with engineering and product teams to turn analysis into shipped features",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Presentation skills",
+      "category_code": "COMM",
+      "evidence": "Present findings clearly to both technical and non-technical stakeholders",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Complex SQL queries",
+      "category_code": "SQL",
+      "evidence": "Strong SQL skills — writing and optimizing complex queries",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Indexing",
+      "category_code": "SQL",
+      "evidence": "understanding indexing",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Event data modeling",
+      "category_code": "SQL",
+      "evidence": "designing a schema for event or telemetry data",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Quantitative reasoning",
+      "category_code": "APTI",
+      "evidence": "Solid quantitative and analytical reasoning — comfortable interpreting experiment results",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Analytical reasoning",
+      "category_code": "APTI",
+      "evidence": "Solid quantitative and analytical reasoning",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Probability",
+      "category_code": "AI",
+      "evidence": "interpreting experiment results, probability, and metrics under ambiguity",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Metrics definition",
+      "category_code": "AI",
+      "evidence": "interpreting experiment results, probability, and metrics under ambiguity",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Bias-variance tradeoff",
+      "category_code": "AI",
+      "evidence": "Foundational machine learning knowledge: bias-variance tradeoff",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Regression",
+      "category_code": "AI",
+      "evidence": "regression vs. classification",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Classification",
+      "category_code": "AI",
+      "evidence": "regression vs. classification",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Gradient descent",
+      "category_code": "AI",
+      "evidence": "how gradient descent works",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Overfitting detection",
+      "category_code": "AI",
+      "evidence": "how to recognize overfitting",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Communication",
+      "category_code": "COMM",
+      "evidence": "Excellent communication skills — able to explain a complex model",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Data cleaning",
+      "category_code": "OTHER",
+      "evidence": "turning a messy dataset into a clear, defensible insight",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "BI/visualization tools",
+      "category_code": "OTHER",
+      "evidence": "Experience with a BI/visualization tool",
+      "confidence": "low"
+    },
+    {
+      "skill_name": "Experimentation platforms",
+      "category_code": "OTHER",
+      "evidence": "exposure to experimentation platforms",
+      "confidence": "low"
+    },
+    {
+      "skill_name": "Portfolio of data projects",
+      "category_code": "OTHER",
+      "evidence": "a portfolio of applied data projects",
+      "confidence": "low"
+    }
+  ]
+}

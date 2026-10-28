@@ -1,0 +1,194 @@
+{
+  "source_type": "jd",
+  "source_file": "Microsoft - Software Engineer.pdf",
+  "company": "Microsoft Corporation",
+  "role": "Software Engineer",
+  "skills": [
+    {
+      "skill_name": "Scalable Software Design",
+      "category_code": "SYSD",
+      "evidence": "Design, build, and maintain scalable, reliable software components",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Agile Practices",
+      "category_code": "SWE",
+      "evidence": "Participate in Agile ceremonies and design reviews with your team",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Clean Code Writing",
+      "category_code": "COD",
+      "evidence": "Write clean, efficient code and hold a high bar in code review",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Code Review",
+      "category_code": "SWE",
+      "evidence": "hold a high bar in code review",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Reliability Engineering",
+      "category_code": "SYSD",
+      "evidence": "Ensure reliability, security, and performance of the systems you own",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Security Awareness",
+      "category_code": "SYSD",
+      "evidence": "Ensure reliability, security, and performance of the systems you own",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Performance Optimization",
+      "category_code": "SYSD",
+      "evidence": "Ensure reliability, security, and performance of the systems you own",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Cross‑functional Collaboration",
+      "category_code": "COMM",
+      "evidence": "Work cross-functionally with PM and design to refine requirements",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Data Structures",
+      "category_code": "DSA",
+      "evidence": "Strong data structures and algorithms fundamentals — hash maps, trees",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Algorithms",
+      "category_code": "DSA",
+      "evidence": "Strong data structures and algorithms fundamentals — ... complexity analysis",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Pattern Matching (Algorithmic)",
+      "category_code": "DSA",
+      "evidence": "Practical coding skills — pattern matching, interval problems",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Interval Problem Solving",
+      "category_code": "DSA",
+      "evidence": "Practical coding skills — ... interval problems",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Large‑Input Performance",
+      "category_code": "DSA",
+      "evidence": "writing code that performs well on large inputs",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Operating Systems Fundamentals",
+      "category_code": "OS",
+      "evidence": "Working knowledge of operating systems (process scheduling, virtual memory, concurrency primitives)",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Process Scheduling",
+      "category_code": "OS",
+      "evidence": "process scheduling",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Virtual Memory",
+      "category_code": "OS",
+      "evidence": "virtual memory",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Concurrency Primitives",
+      "category_code": "OS",
+      "evidence": "concurrency primitives",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "REST APIs",
+      "category_code": "NETW",
+      "evidence": "core networking (REST APIs, timeouts, request lifecycle)",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Network Timeouts",
+      "category_code": "NETW",
+      "evidence": "timeouts, request lifecycle",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Request Lifecycle Understanding",
+      "category_code": "NETW",
+      "evidence": "request lifecycle",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "System‑Level Design",
+      "category_code": "SYSD",
+      "evidence": "Ability to design at the system level — sketch a cloud‑based storage or notification service",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Scalability Reasoning",
+      "category_code": "SYSD",
+      "evidence": "reason about scalability and fault tolerance",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Fault Tolerance Design",
+      "category_code": "SYSD",
+      "evidence": "reason about scalability and fault tolerance",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Object‑Oriented Design",
+      "category_code": "OOD",
+      "evidence": "Understanding of object-oriented design and SOLID principles",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "SOLID Principles",
+      "category_code": "OOD",
+      "evidence": "SOLID principles",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Software Engineering Maturity",
+      "category_code": "SWE",
+      "evidence": "Software engineering maturity — clean code habits, a real testing strategy",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Testing Strategy",
+      "category_code": "SWE",
+      "evidence": "a real testing strategy",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Technical Debt Communication",
+      "category_code": "COMM",
+      "evidence": "comfort talking about technical debt honestly",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Strong Communication",
+      "category_code": "COMM",
+      "evidence": "Strong communication — able to describe a hard problem you solved and how you collaborate across teams",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Azure Cloud Exposure",
+      "category_code": "CLOUD",
+      "evidence": "Exposure to cloud infrastructure (Azure or similar)",
+      "confidence": "medium"
+    },
+    {
+      "skill_name": "Shared Codebase Collaboration",
+      "category_code": "SWE",
+      "evidence": "contributions to a shared codebase in a team setting",
+      "confidence": "medium"
+    }
+  ]
+}
