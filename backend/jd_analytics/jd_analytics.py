@@ -24,7 +24,7 @@ from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel
 
-   from backend.shared.schemas import Skill, SkillList, VALID_CODES  # adjust import to your repo layout
+from backend.shared.schemas import Skill, SkillList, VALID_CODES  # adjust import to your repo layout
 
 load_dotenv()
 
