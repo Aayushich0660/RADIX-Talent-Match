@@ -1,0 +1,98 @@
+{
+  "source_type": "jd",
+  "source_file": "Microsoft - Data Analyst.pdf",
+  "company": "Microsoft Corporation",
+  "role": "Data Analyst",
+  "skills": [
+    {
+      "skill_name": "SQL",
+      "category_code": "SQL",
+      "evidence": "Write and optimize SQL queries against large production datasets",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Schema design",
+      "category_code": "SQL",
+      "evidence": "Design schemas for telemetry and usage data, and know when to normalize vs. denormalize",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Normalization vs. denormalization",
+      "category_code": "SQL",
+      "evidence": "Design schemas ... know when to normalize vs. denormalize",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Dashboard development",
+      "category_code": "OTHER",
+      "evidence": "Build dashboards and reporting that stakeholders actually use",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Anomaly detection",
+      "category_code": "AI",
+      "evidence": "Detect and explain anomalies in usage or business metrics",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Quantitative reasoning",
+      "category_code": "APTI",
+      "evidence": "Solid quantitative reasoning — interpreting trends, sampling, probability, and reasoning with data tables under ambiguity",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Applied statistics",
+      "category_code": "AI",
+      "evidence": "Basic applied statistics/ML literacy: regression vs. classification, what overfitting means",
+      "confidence": "medium"
+    },
+    {
+      "skill_name": "Regression vs. classification",
+      "category_code": "AI",
+      "evidence": "regression vs. classification",
+      "confidence": "medium"
+    },
+    {
+      "skill_name": "Overfitting awareness",
+      "category_code": "AI",
+      "evidence": "what overfitting means",
+      "confidence": "medium"
+    },
+    {
+      "skill_name": "Stakeholder communication",
+      "category_code": "COMM",
+      "evidence": "Excellent stakeholder communication — translating a dashboard or an analysis into a decision a non-technical leader can act on",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Ambiguity handling",
+      "category_code": "APTI",
+      "evidence": "Comfort with ambiguous or incomplete requirements, and the initiative to clarify them",
+      "confidence": "medium"
+    },
+    {
+      "skill_name": "Power BI",
+      "category_code": "OTHER",
+      "evidence": "Experience with a visualization tool (Power BI or similar)",
+      "confidence": "low"
+    },
+    {
+      "skill_name": "Visualization tool proficiency",
+      "category_code": "OTHER",
+      "evidence": "Experience with a visualization tool (Power BI or similar)",
+      "confidence": "low"
+    },
+    {
+      "skill_name": "Dashboard portfolio",
+      "category_code": "OTHER",
+      "evidence": "a portfolio of dashboards or analyses",
+      "confidence": "low"
+    },
+    {
+      "skill_name": "Analytics internship experience",
+      "category_code": "OTHER",
+      "evidence": "prior internship in an analytics role",
+      "confidence": "low"
+    }
+  ]
+}

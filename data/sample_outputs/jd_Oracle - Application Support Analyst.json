@@ -1,0 +1,134 @@
+{
+  "source_type": "jd",
+  "source_file": "Oracle - Application Support Analyst.pdf",
+  "company": "Oracle Financial Services Software Limited",
+  "role": "Application Support Analyst",
+  "skills": [
+    {
+      "skill_name": "SQL",
+      "category_code": "SQL",
+      "evidence": "Comfort with basic SQL — simple SELECT/WHERE queries and an understanding of primary keys",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Linux fundamentals",
+      "category_code": "OS",
+      "evidence": "Operating systems and Linux fundamentals — basic command-line usage",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Command-line usage",
+      "category_code": "OS",
+      "evidence": "basic command-line usage",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Log file analysis",
+      "category_code": "OS",
+      "evidence": "what a log file is",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Batch vs real-time processing",
+      "category_code": "OS",
+      "evidence": "batch vs real-time processing",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Networking fundamentals",
+      "category_code": "NETW",
+      "evidence": "Basic networking knowledge — what an IP address is, client-server architecture fundamentals, and what “latency” means in practice",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "IP addressing",
+      "category_code": "NETW",
+      "evidence": "what an IP address is",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Client‑server architecture",
+      "category_code": "NETW",
+      "evidence": "client-server architecture fundamentals",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Latency awareness",
+      "category_code": "NETW",
+      "evidence": "what “latency” means in practice",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Quantitative reasoning",
+      "category_code": "APTI",
+      "evidence": "Strong quantitative and logical reasoning — data interpretation from tables, arithmetic, and structured problem-solving",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Logical reasoning",
+      "category_code": "APTI",
+      "evidence": "Strong quantitative and logical reasoning — data interpretation from tables, arithmetic, and structured problem-solving",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Communication skills",
+      "category_code": "COMM",
+      "evidence": "Excellent communication skills — able to explain a technical issue to a non‑technical client, stay calm during an escalation, and document what happened clearly",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Incident triage",
+      "category_code": "SWE",
+      "evidence": "Triage, investigate, and resolve incidents raised by banking clients within SLA",
+      "confidence": "medium"
+    },
+    {
+      "skill_name": "Incident investigation",
+      "category_code": "SWE",
+      "evidence": "Triage, investigate, and resolve incidents raised by banking clients within SLA",
+      "confidence": "medium"
+    },
+    {
+      "skill_name": "Incident resolution",
+      "category_code": "SWE",
+      "evidence": "Triage, investigate, and resolve incidents raised by banking clients within SLA",
+      "confidence": "medium"
+    },
+    {
+      "skill_name": "Production database querying",
+      "category_code": "SQL",
+      "evidence": "Query production databases to diagnose issues",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Collaboration with development teams",
+      "category_code": "COMM",
+      "evidence": "Coordinate with development teams on escalations that require a code fix",
+      "confidence": "medium"
+    },
+    {
+      "skill_name": "Log monitoring",
+      "category_code": "OS",
+      "evidence": "Monitor logs and batch/real-time processes to catch issues early",
+      "confidence": "medium"
+    },
+    {
+      "skill_name": "Shift work willingness",
+      "category_code": "OTHER",
+      "evidence": "Willingness to work in shifts and directly support global clients",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Ticketing/incident system experience",
+      "category_code": "OTHER",
+      "evidence": "Prior exposure to a ticketing/incident system",
+      "confidence": "low"
+    },
+    {
+      "skill_name": "Networking coursework",
+      "category_code": "OTHER",
+      "evidence": "coursework in networking or systems administration",
+      "confidence": "low"
+    }
+  ]
+}

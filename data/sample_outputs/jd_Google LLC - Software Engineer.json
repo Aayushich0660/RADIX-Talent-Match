@@ -1,0 +1,170 @@
+{
+  "source_type": "jd",
+  "source_file": "Google LLC - Software Engineer.pdf",
+  "company": "Google LLC",
+  "role": "Software Engineer",
+  "skills": [
+    {
+      "skill_name": "Backend services",
+      "category_code": "COD",
+      "evidence": "Design and implement backend services and APIs that operate reliably at Google scale",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "APIs",
+      "category_code": "COD",
+      "evidence": "Design and implement backend services and APIs that operate reliably at Google scale",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Clean code",
+      "category_code": "COD",
+      "evidence": "Write clean, well-tested, maintainable code",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Code review",
+      "category_code": "SWE",
+      "evidence": "participate in code review",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "System design discussions",
+      "category_code": "SYSD",
+      "evidence": "Take part in system design discussions for new features and infrastructure",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Performance troubleshooting",
+      "category_code": "SYSD",
+      "evidence": "Diagnose and resolve performance and reliability issues in production",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Reliability engineering",
+      "category_code": "SYSD",
+      "evidence": "operate reliably at Google scale",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Cross‑functional collaboration",
+      "category_code": "COMM",
+      "evidence": "Collaborate closely with cross-functional partners across product, design, and SRE",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Data structures",
+      "category_code": "DSA",
+      "evidence": "Strong grasp of data structures and algorithms",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Algorithms",
+      "category_code": "DSA",
+      "evidence": "Strong grasp of data structures and algorithms",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Complexity analysis",
+      "category_code": "APTI",
+      "evidence": "reason about time and space complexity under pressure",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Programming (problem to code)",
+      "category_code": "COD",
+      "evidence": "turn a problem statement into working, efficient code quickly",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Operating systems fundamentals",
+      "category_code": "OS",
+      "evidence": "processes, threads, virtual memory",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Networking concepts",
+      "category_code": "NETW",
+      "evidence": "TCP/UDP, HTTP, how a web request actually travels",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Object‑oriented design",
+      "category_code": "OOD",
+      "evidence": "object-oriented design and common design patterns",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Design patterns",
+      "category_code": "OOD",
+      "evidence": "common design patterns",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Scalable system design",
+      "category_code": "SYSD",
+      "evidence": "Comfort reasoning about system design at scale",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Testing strategy",
+      "category_code": "SWE",
+      "evidence": "testing strategy",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Technical debt awareness",
+      "category_code": "SWE",
+      "evidence": "awareness of technical debt",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "CI/CD concepts",
+      "category_code": "CLOUD",
+      "evidence": "basic CI/CD concepts",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Written communication",
+      "category_code": "COMM",
+      "evidence": "Clear written and verbal communication",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Verbal communication",
+      "category_code": "COMM",
+      "evidence": "Clear written and verbal communication",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Technical presentation",
+      "category_code": "COMM",
+      "evidence": "explain a technical tradeoff to engineers and non‑engineers alike",
+      "confidence": "high"
+    },
+    {
+      "skill_name": "Internship experience on large codebase",
+      "category_code": "OTHER",
+      "evidence": "Prior internship experience on a large codebase",
+      "confidence": "low"
+    },
+    {
+      "skill_name": "Open‑source contributions",
+      "category_code": "OTHER",
+      "evidence": "open-source contributions",
+      "confidence": "low"
+    },
+    {
+      "skill_name": "Production distributed systems exposure",
+      "category_code": "SYSD",
+      "evidence": "exposure to distributed systems in production",
+      "confidence": "low"
+    },
+    {
+      "skill_name": "Security",
+      "category_code": "SYSD",
+      "evidence": "You'll write production code, participate in design discussions, and help keep systems fast, reliable, and secure at massive scale.",
+      "confidence": "medium"
+    }
+  ]
+}
