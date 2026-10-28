@@ -11,6 +11,7 @@ import { PreferredRolesSection } from './components/sections/PreferredRolesSecti
 import { CvUploadSection } from './components/sections/CvUploadSection';
 import { ProfileSummary } from './components/ProfileSummary';
 import { ProfilePreviewModal } from './components/ProfilePreviewModal';
+import { MatchingAssessment } from './components/MatchingAssessment';
 import { CandidateProfileState } from './types/profile';
 import { calculateProfileCompletion } from './utils/completion';
 import { INITIAL_EMPTY_PROFILE, SAMPLE_CANDIDATE_PROFILE } from './utils/sampleData';
@@ -26,6 +27,7 @@ export default function App() {
   const profileStateRef = useRef(profileState);
   profileStateRef.current = profileState;
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const exportedProfile = exportToRadixProfileJSON(profileState);
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'info' } | null>(
     null
   );
@@ -392,6 +394,7 @@ export default function App() {
 
           {/* Secondary Column: Live Profile Summary */}
           <div className="lg:col-span-4">
+            <MatchingAssessment profile={exportedProfile} />
             <ProfileSummary
               state={profileState}
               completion={completion}

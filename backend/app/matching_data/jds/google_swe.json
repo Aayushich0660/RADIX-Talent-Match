@@ -1,0 +1,14 @@
+{
+  "source_type": "jd",
+  "source_file": "google_swe.json",
+  "company": "Google",
+  "role": "Software Engineer",
+  "skills": [
+    {"skill_name": "Data Structures and Algorithms", "category_code": "DSA", "evidence": "Problem solving and algorithm design", "confidence": "high"},
+    {"skill_name": "Python", "category_code": "SWE", "evidence": "Production-quality application development", "confidence": "high"},
+    {"skill_name": "Distributed Systems", "category_code": "SYSD", "evidence": "Design scalable backend services", "confidence": "high"},
+    {"skill_name": "SQL", "category_code": "SQL", "evidence": "Relational data querying", "confidence": "medium"},
+    {"skill_name": "Cloud Computing", "category_code": "CLOUD", "evidence": "Deploy and operate services", "confidence": "medium"},
+    {"skill_name": "Technical Communication", "category_code": "COMM", "evidence": "Collaborate across teams", "confidence": "medium"}
+  ]
+}

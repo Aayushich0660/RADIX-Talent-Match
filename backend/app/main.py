@@ -7,6 +7,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes.profiles import router as profiles_router
+from app.routes.matching import router as matching_router
 from app.database import get_database_status
 
 app = FastAPI(
@@ -29,6 +30,7 @@ app.add_middleware(
 
 # Include profile routes
 app.include_router(profiles_router)
+app.include_router(matching_router)
 
 
 @app.get("/api/health", tags=["Health"])

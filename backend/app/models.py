@@ -76,6 +76,8 @@ class HackathonProjectModel(BaseModel):
     description: str = Field(default="")
     technologies: List[str] = Field(default_factory=list)
     date_or_year: str = Field(default="")
+    category_code: Optional[RadixCategoryCode] = Field(default=None)
+    category_codes: List[RadixCategoryCode] = Field(default_factory=list)
 
 
 class InternshipModel(BaseModel):
@@ -86,6 +88,8 @@ class InternshipModel(BaseModel):
     is_ongoing: bool = Field(default=False)
     description: str = Field(default="")
     technologies: List[str] = Field(default_factory=list)
+    category_code: Optional[RadixCategoryCode] = Field(default=None)
+    category_codes: List[RadixCategoryCode] = Field(default_factory=list)
 
 
 class CertificationModel(BaseModel):
@@ -93,6 +97,8 @@ class CertificationModel(BaseModel):
     issuing_organization: str = Field(default="")
     issue_year: str = Field(default="")
     credential_url: str = Field(default="")
+    category_code: Optional[RadixCategoryCode] = Field(default=None)
+    category_codes: List[RadixCategoryCode] = Field(default_factory=list)
 
 
 class CandidateProfilePayload(BaseModel):

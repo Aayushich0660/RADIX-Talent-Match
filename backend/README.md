@@ -185,6 +185,29 @@ List candidate profiles with pagination.
 ### `DELETE /api/profiles/{profile_id}`
 Delete a candidate profile.
 
+## 7. Roles 4 and 5: Talent Check and Skill Matching
+
+The profile builder API also serves deterministic Talent Check and Skill
+Matching endpoints. They accept the same candidate profile payload used by
+`POST /api/profiles`; send the profile object itself under `profile` (not the
+stored response envelope). Company expectations and sample job descriptions
+are maintained in `app/matching_data/`.
+
+- `GET /api/companies` lists configured company expectations.
+- `GET /api/jds` lists available sample job descriptions.
+- `GET /api/jds/{source_file}` returns one sample job description.
+- `POST /api/talent-check` accepts `{"profile": {...}, "company": "Google"}`.
+- `POST /api/skill-match` accepts `{"profile": {...}, "jd": {...}}`.
+- `POST /api/analyze` accepts both `company` and `jd` with the profile.
+
+Skill Matching uses normalized exact/alias matching, followed by fuzzy matching
+within the same category. Talent Check uses confidence-weighted skill evidence
+and only grants experience bonuses when a record explicitly includes
+`category_code` or `category_codes`. Existing profile records remain compatible:
+missing skill confidence is treated as `medium` for scoring, and experience
+category tags are optional. `rapidfuzz` accelerates fuzzy matching; a
+standard-library fallback is available if it is not installed.
+
 The shared contract uses these top-level fields: `name` (string), `email`
 (string), `phone` (string or null), `education` (array of objects containing
 `degree`, `field_of_study`, `institution`, `graduation_year`, and `cgpa`), `skills`
