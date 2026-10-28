@@ -1,0 +1,14 @@
+{
+  "source_type": "jd",
+  "source_file": "microsoft_data_analyst.json",
+  "company": "Microsoft",
+  "role": "Data Analyst",
+  "skills": [
+    {"skill_name": "SQL", "category_code": "SQL", "evidence": "Query and analyze structured data", "confidence": "high"},
+    {"skill_name": "Python", "category_code": "SWE", "evidence": "Automate analysis workflows", "confidence": "high"},
+    {"skill_name": "Data Visualization", "category_code": "OTHER", "evidence": "Communicate insights with dashboards", "confidence": "high"},
+    {"skill_name": "Statistics", "category_code": "APTI", "evidence": "Apply statistical reasoning", "confidence": "medium"},
+    {"skill_name": "Power BI", "category_code": "OTHER", "evidence": "Build business intelligence reports", "confidence": "medium"},
+    {"skill_name": "Stakeholder Communication", "category_code": "COMM", "evidence": "Present findings to partners", "confidence": "medium"}
+  ]
+}
